@@ -1,0 +1,22 @@
+\connect "todo_db";
+
+
+GRANT SELECT
+    ON ALL TABLES
+        IN SCHEMA "public"
+    TO "reader"
+;
+
+GRANT INSERT
+    , UPDATE
+    , DELETE
+    ON ALL TABLES
+        IN SCHEMA "public"
+    TO "writer"
+;
+
+GRANT ALL PRIVILEGES
+    ON ALL TABLES
+        IN SCHEMA "public"
+    TO "schema_admin"
+;
