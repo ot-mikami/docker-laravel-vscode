@@ -1,0 +1,26 @@
+version: '3'
+
+volumes:
+  composer-vendor:
+
+services:
+  web-app:
+    build:
+      context: ./.devcontainer/dockerfiles/web-app
+      args:
+        TZ: 'Asia/Tokyo'
+        COMPOSER_VERSION: 1
+    restart: always
+    env_file:
+      - ./.devcontainer/services/web-app/env/web-app.env
+    volumes:
+      - ./.devcontainer/services/web-app/conf/php.ini:/etc/php7/php.ini
+      - ./.devcontainer/services/web-app/conf/httpd.conf:/etc/apache2/httpd.conf
+      - ./.devcontainer/services/web-app/htdocs:/var/www/localhost/htdocs
+      - ./.devcontainer/services/web-app/log/apache2:/var/log/apache2
+      - ./src:/usr/src
+      # Laravel プロジェクトが src 直下でない場合、vendor ディレクトリのパスを調整する
+      - composer-vendor:/usr/src/vendor
+    ports:
+      - '${APACHE_HOST_PORT:-80}:80'
+      - '${ARTISAN_SERVE_HOST_PORT:-8000}:8000'
